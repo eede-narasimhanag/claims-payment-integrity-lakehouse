@@ -1,0 +1,49 @@
+# Databricks Asset Bundle: one declarative pipeline (silver) + one workflow (daily run).
+# NOT validated by the scaffold author. Run `databricks bundle validate` first and fix
+# anything your CLI version reports. Free Edition: serverless only, one active pipeline,
+# max 5 concurrent job tasks.
+bundle:
+  name: claims_payment_integrity
+
+targets:
+  dev:
+    default: true
+    mode: development
+
+resources:
+  pipelines:
+    silver_pipeline:
+      name: claims-silver-pipeline
+      catalog: workspace
+      schema: silver
+      serverless: true
+      libraries:
+        - notebook:
+            path: ./notebooks/02_silver_pipeline.py
+
+  jobs:
+    claims_daily_run:
+      name: claims-daily-run
+      tasks:
+        - task_key: bronze_ingest
+          notebook_task:
+            notebook_path: ./notebooks/01_bronze_ingest.py
+
+        - task_key: silver
+          depends_on:
+            - task_key: bronze_ingest
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.silver_pipeline.id}
+
+        - task_key: dimensions_scd2
+          depends_on:
+            - task_key: bronze_ingest
+          notebook_task:
+            notebook_path: ./notebooks/03_dimensions_scd2.py
+
+        - task_key: rules_gold
+          depends_on:
+            - task_key: silver
+            - task_key: dimensions_scd2
+          notebook_task:
+            notebook_path: ./notebooks/04_rules_gold.py

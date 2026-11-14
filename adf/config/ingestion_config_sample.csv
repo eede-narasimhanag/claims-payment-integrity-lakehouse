@@ -1,0 +1,6 @@
+source_name,source_type,source_path,target_folder,file_format,watermark_column,is_active
+claim_lines,blob,landing/claim_lines/,raw/claim_lines,csv,load_date,1
+members,blob,landing/members/,raw/members,csv,load_date,1
+providers,blob,landing/providers/,raw/providers,csv,load_date,1
+eligibility,blob,landing/eligibility/,raw/eligibility,csv,,1
+procedure_dx_rules,blob,landing/procedure_dx_rules/,raw/procedure_dx_rules,csv,,1
