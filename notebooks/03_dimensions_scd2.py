@@ -5,8 +5,11 @@
 # MAGIC current row (`is_current = false`, `effective_end`) and inserts a new current row.
 # MAGIC
 # MAGIC Pattern: stage every incoming row twice, once keyed (to close the old version) and once
-# MAGIC with a NULL key (to insert the new version). Written for Delta `MERGE`; not run against a
-# MAGIC live workspace by the author of this scaffold, so check the row counts in section 4.
+# MAGIC with a NULL key (to insert the new version).
+# MAGIC
+# MAGIC **Idempotent by design:** a snapshot only changes a key if its `effective_start` is newer than the
+# MAGIC current row's. Replaying old snapshots (every run replays all `load_date`s) is therefore a no-op.
+# MAGIC Without this guard, a second run closed current rows with an older date and duplicated history.
 
 # COMMAND ----------
 
@@ -59,9 +62,10 @@ def scd2_merge(name: str, bronze: str, key: str, attrs: list[str], load_date: st
             SELECT NULL AS merge_key, s.*
             FROM stg s JOIN {target} d
               ON s.{key} = d.{key} AND d.is_current AND s.attr_hash <> d.attr_hash
+             AND s.effective_start > d.effective_start
         ) AS u
         ON t.{key} = u.merge_key AND t.is_current = true
-        WHEN MATCHED AND t.attr_hash <> u.attr_hash THEN
+        WHEN MATCHED AND t.attr_hash <> u.attr_hash AND u.effective_start > t.effective_start THEN
             UPDATE SET t.is_current = false, t.effective_end = u.effective_start
         WHEN NOT MATCHED THEN
             INSERT ({key}, {attr_list}, attr_hash, effective_start, effective_end, is_current)
@@ -90,3 +94,11 @@ spark.sql(f"""
     SELECT 'dim_provider', count(*), sum(CAST(is_current AS INT)), count(DISTINCT provider_id)
     FROM {CATALOG}.gold.dim_provider
 """).show()
+
+spark.sql(f"""
+    SELECT 'dim_member' AS dim, count(*) AS bad_date_ranges FROM {CATALOG}.gold.dim_member
+    WHERE effective_end IS NOT NULL AND effective_end < effective_start
+    UNION ALL
+    SELECT 'dim_provider', count(*) FROM {CATALOG}.gold.dim_provider
+    WHERE effective_end IS NOT NULL AND effective_end < effective_start
+""").show()  # expect 0 and 0
