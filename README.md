@@ -90,6 +90,12 @@ Step by step in [docs/setup_free_tier.md](docs/setup_free_tier.md) and [docs/run
 
 The trend chart is limited to 2023–2024. Months outside that window contain only the 600 injected out-of-coverage claims (100% flagged), so they would distort the trend.
 
+## Portfolio website
+
+A project-focused portfolio page is available at [docs/index.html](docs/index.html). To publish it with GitHub Pages, open the repository's **Settings → Pages**, set the build and deployment source to **GitHub Actions**, and push to `master`. The [Pages workflow](.github/workflows/pages.yml) deploys the contents of `docs/` to:
+
+<https://eede-narasimhanag.github.io/claims-payment-integrity-lakehouse/>
+
 ### Workflow run
 
 ![Workflow run](docs/images/job_run_graph.png)

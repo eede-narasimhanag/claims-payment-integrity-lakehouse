@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="A Databricks lakehouse that checks synthetic healthcare claims for payment-integrity issues and explains each flag."
+    >
+    <meta name="theme-color" content="#101b2b">
+    <title>Claims Payment Integrity Lakehouse | Project Portfolio</title>
+    <link rel="stylesheet" href="portfolio.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Claims Payment Integrity project home">
+        <span class="brand-mark" aria-hidden="true">CI</span>
+        <span>Data engineering project</span>
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="#approach">Approach</a>
+        <a href="#results">Results</a>
+        <a href="#engineering">Engineering</a>
+        <a class="nav-cta" href="https://github.com/eede-narasimhanag/claims-payment-integrity-lakehouse">
+          View source <span aria-hidden="true">↗</span>
+        </a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="status-dot"></span> Healthcare claims · Databricks · Azure</p>
+          <h1>Make suspicious claim payments easier to <span>spot and review.</span></h1>
+          <p class="hero-summary">
+            A claims payment-integrity lakehouse that turns raw claim, member, provider and eligibility
+            data into traceable, explainable flags—not automatic fraud decisions.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="https://github.com/eede-narasimhanag/claims-payment-integrity-lakehouse">
+              Explore the repository <span aria-hidden="true">↗</span>
+            </a>
+            <a class="button button-secondary" href="#approach">See how it works <span aria-hidden="true">↓</span></a>
+          </div>
+          <p class="data-note"><strong>Important:</strong> all data is synthetic; this is a personal demonstration project.</p>
+        </div>
+        <div class="hero-card" aria-label="Project pipeline overview">
+          <div class="card-topline"><span>PAYMENT INTEGRITY</span><span class="live-pill">PROJECT OVERVIEW</span></div>
+          <div class="claim-preview">
+            <div class="claim-icon" aria-hidden="true">⌁</div>
+            <div>
+              <span class="small-label">CLAIM LINES PROCESSED</span>
+              <strong>61,201</strong>
+            </div>
+          </div>
+          <div class="signal-row">
+            <span class="signal-icon" aria-hidden="true">!</span>
+            <div><strong>3,900 lines flagged</strong><span>with rule-level reasons for review</span></div>
+            <span class="signal-rate">6.4%</span>
+          </div>
+          <div class="pipeline-mini" aria-label="Bronze to Silver to Gold data flow">
+            <span>Bronze</span><i aria-hidden="true"></i><span>Silver</span><i aria-hidden="true"></i><span class="gold-stage">Gold</span>
+          </div>
+          <p class="card-footnote">Batch detection and reporting. No payment system or reviewer workflow is connected.</p>
+        </div>
+        <div class="hero-orb orb-one" aria-hidden="true"></div>
+        <div class="hero-orb orb-two" aria-hidden="true"></div>
+      </section>
+
+      <section class="section business-section" id="business">
+        <div class="section-heading">
+          <p class="eyebrow">BUSINESS PROBLEM, SOLUTION &amp; BENEFIT</p>
+          <h2>From payment leakage risk<br>to <span>focused review.</span></h2>
+          <p class="business-summary">
+            Health payers handle high volumes of claim lines. The challenge is to catch questionable
+            payments consistently without treating every claim as an exception.
+          </p>
+        </div>
+        <div class="business-grid">
+          <article class="text-panel">
+            <span class="panel-index">01 / BUSINESS PROBLEM</span>
+            <h3>Payment leakage is hard to spot at scale</h3>
+            <p>
+              Duplicate charges, unusually high amounts, coverage errors and procedure/diagnosis
+              mismatches can pass through when checks rely on manual review or fragmented data.
+            </p>
+          </article>
+          <article class="text-panel solution-panel">
+            <span class="panel-index">02 / SOLUTION</span>
+            <h3>Build a trusted exception-detection pipeline</h3>
+            <p>
+              Ingest and validate claims with their reference data, preserve member/provider history,
+              then apply five explainable rules and record each flag with its reason.
+            </p>
+          </article>
+          <article class="text-panel benefit-panel">
+            <span class="panel-index">03 / POTENTIAL BUSINESS BENEFIT</span>
+            <h3>Focus people on the exceptions</h3>
+            <p>
+              A review team could prioritize suspicious lines, investigate recurring provider
+              patterns and retain evidence for follow-up—while clean claims continue through the
+              normal process.
+            </p>
+          </article>
+        </div>
+        <p class="benefit-caveat">
+          This project demonstrates the detection and reporting layer only. It does not block payments,
+          run a reviewer workflow or measure recovered dollars or operational savings.
+        </p>
+      </section>
+
+      <section class="metrics" id="results" aria-label="Measured project results">
+        <div><strong>61,201</strong><span>synthetic claim lines</span></div>
+        <div><strong>3,900</strong><span>lines flagged for review</span></div>
+        <div><strong>5</strong><span>payment-integrity rules</span></div>
+        <div><strong>2m 4s</strong><span>measured full workflow run</span></div>
+      </section>
+
+      <section class="section architecture-section" id="approach">
+        <div class="section-heading">
+          <p class="eyebrow">THE ARCHITECTURE</p>
+          <h2>Layered for <span>traceability.</span></h2>
+          <p class="architecture-summary">
+            A Bronze/Silver/Gold lakehouse separates raw intake, quality checks, historical dimensions
+            and analytical outputs.
+          </p>
+        </div>
+        <div class="architecture-flow" aria-label="Claims lakehouse architecture from source files through Bronze, Silver and Gold to reporting">
+          <article class="architecture-node">
+            <span class="architecture-index">01 / SOURCES</span>
+            <h3>Input files</h3>
+            <p>Claims · members · providers · eligibility · procedure rules</p>
+          </article>
+          <span class="architecture-connector" aria-hidden="true">→</span>
+          <article class="architecture-node">
+            <span class="architecture-index">02 / BRONZE</span>
+            <h3>Raw landing</h3>
+            <p>Auto Loader · raw strings · source lineage</p>
+          </article>
+          <span class="architecture-connector" aria-hidden="true">→</span>
+          <article class="architecture-node">
+            <span class="architecture-index">03 / SILVER</span>
+            <h3>Validated data</h3>
+            <p>Typed Delta tables · expectations · quarantine</p>
+          </article>
+          <span class="architecture-connector" aria-hidden="true">→</span>
+          <article class="architecture-node">
+            <span class="architecture-index">04 / GOLD</span>
+            <h3>Business model</h3>
+            <p>SCD Type 2 dimensions · claim fact · five rules</p>
+          </article>
+          <span class="architecture-connector" aria-hidden="true">→</span>
+          <article class="architecture-node">
+            <span class="architecture-index">05 / CONSUME</span>
+            <h3>Insights</h3>
+            <p>KPI SQL · rule summary · dashboard</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section rules-section">
+        <div class="section-heading compact-heading">
+          <p class="eyebrow">EXPLAINABLE RULES</p>
+          <h2>Five checks. <span>One review trail.</span></h2>
+          <p>Each rule marks a claim line and records why it was flagged. A flag means “review this,” not “fraud.”</p>
+        </div>
+        <div class="rules-grid">
+          <article class="rule-card"><span class="rule-number">01</span><h3>Duplicate line</h3><p>Repeat claim characteristics; the first occurrence remains unflagged.</p><strong>1,200 lines</strong></article>
+          <article class="rule-card"><span class="rule-number">02</span><h3>Overbilled</h3><p>Billed amount per unit is more than 3× the procedure’s median allowed amount per unit.</p><strong>900 lines</strong></article>
+          <article class="rule-card"><span class="rule-number">03</span><h3>Procedure / diagnosis</h3><p>Procedure code does not match an allowed diagnosis prefix in the demo rules.</p><strong>900 lines</strong></article>
+          <article class="rule-card"><span class="rule-number">04</span><h3>Outside coverage</h3><p>Service date falls outside the member’s available coverage span.</p><strong>600 lines</strong></article>
+          <article class="rule-card"><span class="rule-number">05</span><h3>Invalid amount</h3><p>Units or billed amount ≤ 0, paid amount &lt; 0, or paid exceeds billed.</p><strong>300 lines</strong></article>
+        </div>
+        <p class="section-footnote">These counts reflect labelled anomalies injected into synthetic data; they are not real-world findings.</p>
+      </section>
+
+      <section class="section dashboard-section">
+        <div class="dashboard-copy">
+          <p class="eyebrow">FROM TABLES TO DECISIONS</p>
+          <h2>Results made <span>visible.</span></h2>
+          <p>
+            The dashboard summarizes flagged lines by rule, shows the monthly flagged share of paid
+            amounts, and ranks providers within specialty. The trend is restricted to 2023–2024 to
+            exclude a known synthetic-data artifact.
+          </p>
+          <a class="text-link" href="https://github.com/eede-narasimhanag/claims-payment-integrity-lakehouse/blob/master/README.md#dashboard">
+            Read the project details <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+        <figure class="dashboard-frame">
+          <img src="images/dashboard.png" alt="Claims payment-integrity dashboard with monthly trend, rule summary and provider ranking">
+          <figcaption>Dashboard built from SQL queries on the gold tables</figcaption>
+        </figure>
+      </section>
+
+      <section class="section engineering-section" id="engineering">
+        <div class="engineering-heading">
+          <p class="eyebrow">ENGINEERING, NOT JUST A DEMO</p>
+          <h2>Debugged for <span>safe re-runs.</span></h2>
+        </div>
+        <div class="engineering-content">
+          <p>
+            Replaying bronze snapshots exposed an SCD2 bug: a repeat run could close current rows
+            using an older effective date and duplicate history. I added a newer-snapshot guard,
+            a bad-date-range check, rebuilt the dimensions and verified that a repeat run leaves
+            the row counts unchanged.
+          </p>
+          <ul class="proof-list">
+            <li><span>✓</span> PySpark rule library with pytest coverage</li>
+            <li><span>✓</span> GitHub Actions runs lint and tests</li>
+            <li><span>✓</span> Two-load SCD2 behavior verified</li>
+            <li><span>✓</span> Databricks workflow run end to end</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="limits">
+        <div class="limits-icon" aria-hidden="true">i</div>
+        <div>
+          <p class="eyebrow">SCOPE &amp; LIMITATIONS</p>
+          <h2>Clear about what this project does—and doesn’t.</h2>
+          <p>
+            Synthetic data only. The project detects and reports; it is not connected to payment
+            holds, recovery, or a human review queue. Rules are simplified teaching examples, not
+            production edits. No real-world savings, clinical validity or HIPAA compliance is claimed.
+            Azure Data Factory and governance SQL are documented but not run in Azure.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <span class="brand-mark" aria-hidden="true">CI</span>
+        <p>Claims Payment Integrity Lakehouse<br><span>A data engineering portfolio project</span></p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/eede-narasimhanag/claims-payment-integrity-lakehouse">GitHub repository ↗</a>
+        <a href="https://github.com/eede-narasimhanag/claims-payment-integrity-lakehouse/blob/master/README.md">Project README ↗</a>
+      </div>
+    </footer>
+  </body>
+</html>
